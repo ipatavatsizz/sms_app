@@ -257,7 +257,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.1"
+<<<<<<< Updated upstream
   timezone:
+=======
+  upower:
+>>>>>>> Stashed changes
     dependency: transitive
     description:
       name: timezone
@@ -281,6 +285,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.0"
+<<<<<<< Updated upstream
   xdg_directories:
     dependency: transitive
     description:
@@ -289,6 +294,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.3"
+=======
+>>>>>>> Stashed changes
   xml:
     dependency: transitive
     description:
