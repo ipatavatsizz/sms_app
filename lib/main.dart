@@ -1,64 +1,58 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
-import 'package:battery_plus/battery_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:readsms/readsms.dart';
+import 'package:sms_app/notifications.dart';
 import 'package:telephony/telephony.dart';
 
-const int processID = 0;
-const int closeLevel = 10;
-
 @pragma('vm:entry-point')
-void handleMessage(SMS sms) {
-  if (sms.sender == '+905550035244') return; // prevent self-loop
+Future<void> handleMessage(SMS sms) async {
+  DartPluginRegistrant.ensureInitialized();
 
-  print(sms);
+  if (sms.sender == '+905550035244') return;
 
-  Telephony.backgroundInstance.sendSms(to: sms.sender, message: sms.body);
+  await Telephony.backgroundInstance.sendSms(
+    to: sms.sender,
+    message: sms.body,
+  );
 }
 
 @pragma('vm:entry-point')
-void backgroundProcess() async {
-  print('Background Process is on');
+Future<void> backgroundProcess() async {
+  DartPluginRegistrant.ensureInitialized();
+
+  await NotificationManager.initialize();
+
+  await NotificationManager.instance
+      .showNotificationMessage('Working on background');
 
   // Start listening
   final reader = Readsms();
   reader.smsStream.listen(handleMessage);
   reader.read();
-
-  // Stop program if battery lower than ten percent.
-  final battery = Battery();
-  battery.batteryLevel.asStream().listen((level) => switch (level) {
-        <= closeLevel => {
-            print('Low battery detected, exiting.'),
-            reader.dispose(),
-            AndroidAlarmManager.cancel(processID),
-            ServicesBinding.instance.exitApplication(AppExitType.required),
-            exit(0),
-          },
-        _ => null,
-      });
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await NotificationManager.initialize();
+
   await AndroidAlarmManager.initialize();
 
-  runApp(const MainApp());
+  runApp(MainApp());
 
+  await NotificationManager.requestPermission();
   await Telephony.instance.requestSmsPermissions;
 
-  await AndroidAlarmManager.oneShot(
-    Duration.zero,
+  await AndroidAlarmManager.periodic(
+    Duration(seconds: 30),
     0,
     backgroundProcess,
     allowWhileIdle: true,
     rescheduleOnReboot: true,
+    exact: true,
   );
 }
 
