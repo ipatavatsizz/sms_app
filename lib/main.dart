@@ -1,37 +1,42 @@
 import 'dart:async';
-import 'dart:ui';
 
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:another_telephony/telephony.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:readsms/readsms.dart';
 import 'package:sms_app/notifications.dart';
-import 'package:telephony/telephony.dart';
+import 'package:vibration/vibration.dart';
+import 'package:workmanager/workmanager.dart';
 
 @pragma('vm:entry-point')
-Future<void> handleMessage(SMS sms) async {
-  DartPluginRegistrant.ensureInitialized();
+final Stopwatch stopwatch = Stopwatch()..start();
 
-  if (sms.sender == '+905550035244') return;
-
-  await Telephony.backgroundInstance.sendSms(
-    to: sms.sender,
-    message: sms.body,
-  );
+@pragma(('vm:entry-point'))
+Future<void> handleBackgroundTelephonyMessage(SmsMessage message) async {
+  await NotificationManager.instance
+      .showNotificationMessage('handleBackgroundTelephonyMessage!');
+  Vibration.vibrate(duration: 1000);
 }
 
 @pragma('vm:entry-point')
 Future<void> backgroundProcess() async {
-  DartPluginRegistrant.ensureInitialized();
+  Workmanager().executeTask((taskName, inputData) async {
+    await NotificationManager.instance
+        .showNotificationMessage('backgroudProcess is on');
+    await NotificationManager.instance
+        .showNotificationMessage('Elapsed time ${stopwatch.elapsed.inMinutes}');
 
-  await NotificationManager.initialize();
+    Telephony.backgroundInstance.listenIncomingSms(
+      listenInBackground: true,
+      onNewMessage: (message) async {
+        await NotificationManager.instance
+            .showNotificationMessage('handleTelephonyMessage!');
+        Vibration.vibrate(duration: 1000);
+      },
+      onBackgroundMessage: handleBackgroundTelephonyMessage,
+    );
 
-  await NotificationManager.instance
-      .showNotificationMessage('Working on background');
-
-  // Start listening
-  final reader = Readsms();
-  reader.smsStream.listen(handleMessage);
-  reader.read();
+    return true;
+  });
 }
 
 Future<void> main() async {
@@ -39,25 +44,23 @@ Future<void> main() async {
 
   await NotificationManager.initialize();
 
-  await AndroidAlarmManager.initialize();
+  runApp(SmsApp());
 
-  runApp(MainApp());
+  await Telephony.backgroundInstance.requestSmsPermissions;
 
   await NotificationManager.requestPermission();
-  await Telephony.instance.requestSmsPermissions;
 
-  await AndroidAlarmManager.periodic(
-    Duration(seconds: 30),
-    0,
-    backgroundProcess,
-    allowWhileIdle: true,
-    rescheduleOnReboot: true,
-    exact: true,
+  Workmanager().initialize(backgroundProcess, isInDebugMode: kDebugMode);
+  Workmanager().registerPeriodicTask(
+    'listenBackground',
+    'listenBackground',
+    frequency: Duration(minutes: 15),
+    existingWorkPolicy: ExistingWorkPolicy.replace,
   );
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class SmsApp extends StatelessWidget {
+  const SmsApp({super.key});
 
   @override
   Widget build(BuildContext context) {
