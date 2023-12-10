@@ -7,9 +7,6 @@ import 'package:sms_app/notifications.dart';
 import 'package:vibration/vibration.dart';
 import 'package:workmanager/workmanager.dart';
 
-@pragma('vm:entry-point')
-final Stopwatch stopwatch = Stopwatch()..start();
-
 @pragma(('vm:entry-point'))
 Future<void> handleBackgroundTelephonyMessage(SmsMessage message) async {
   await NotificationManager.instance
@@ -22,8 +19,6 @@ Future<void> backgroundProcess() async {
   Workmanager().executeTask((taskName, inputData) async {
     await NotificationManager.instance
         .showNotificationMessage('backgroudProcess is on');
-    await NotificationManager.instance
-        .showNotificationMessage('Elapsed time ${stopwatch.elapsed.inMinutes}');
 
     Telephony.backgroundInstance.listenIncomingSms(
       listenInBackground: true,
@@ -64,10 +59,11 @@ class SmsApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: Text('Hello World!'),
+          child:
+              Text('Wait 5 seconds and you close this application completely!'),
         ),
       ),
     );
