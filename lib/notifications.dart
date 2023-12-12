@@ -48,7 +48,8 @@ class NotificationManager {
       'SMS App',
       message,
       NotificationDetails(
-        android: AndroidNotificationDetails('1', 'App notifications'),
+        android: AndroidNotificationDetails('1', 'App notifications',
+            channelDescription: 'Background service related notifications'),
       ),
     );
   }
