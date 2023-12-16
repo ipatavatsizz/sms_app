@@ -1,7 +1,7 @@
 # SMS App (dev)
 
 > [!CAUTION]
-> Do not clone this repository, use main instead.
+> Do not clone this repository, contains non-stable experimental features may cause issues!
 
 SMS App is a background sms listening app for my personal purposes. Uses `Workmanager` package and in every 15 minutes, restarts itself and listens sms using `Telephony` package.
 
