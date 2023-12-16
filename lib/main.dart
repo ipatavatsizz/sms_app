@@ -4,7 +4,6 @@ import 'package:another_telephony/telephony.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sms_app/feature/home/home_view.dart';
-import 'package:sms_app/product/core/application.dart';
 import 'package:sms_app/product/model/filter_model.dart';
 import 'package:sms_app/product/service/database_service.dart';
 import 'package:sms_app/product/service/notification_service.dart';
@@ -76,7 +75,6 @@ class SmsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      scaffoldMessengerKey: Application.messenger,
       theme: ThemeData.light().copyWith(
         colorScheme: lightColorScheme,
       ),
