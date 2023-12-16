@@ -6,9 +6,13 @@ version: 0.1.0
 environment:
   sdk: '>=3.1.4 <4.0.0'
 
+isar_version: &isar_version 3.1.0+1
+
 dependencies:
   flutter:
     sdk: flutter
+  isar: *isar_version
+  isar_flutter_libs: *isar_version
   another_telephony:
     git:
       url: https://github.com/thanhdang198/Telephony.git
@@ -17,13 +21,14 @@ dependencies:
   vibration: ^1.8.4
   workmanager: ^0.5.2
   ionicons: ^0.2.2
-  hive: ^2.2.3
   path_provider: ^2.1.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  isar_generator: *isar_version
+  build_runner: ^2.4.7
 
 flutter:
   uses-material-design: true
