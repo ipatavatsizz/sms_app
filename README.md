@@ -4,7 +4,7 @@ SMS App is a background sms listening app for my personal purposes. Uses `Workma
 
 ## Technologies
 
-> Uses `Workmanager`, `Telephony`, `Vibration`, and `Hive` packages.
+> Uses `Workmanager`, `Telephony`, `Vibration`, and `Isar` packages.
 
 #### Developer Note:
 
