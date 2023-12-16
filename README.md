@@ -1,6 +1,6 @@
 # SMS App (dev)
 
-<h3 style="color: red">Do not clone this branch (dev), is not stable.</h3>
+<h3 style="color:red;">Do not clone this branch (dev), is not stable.</h3>
 
 SMS App is a background sms listening app for my personal purposes. Uses `Workmanager` package and in every 15 minutes, restarts itself and listens sms using `Telephony` package.
 
