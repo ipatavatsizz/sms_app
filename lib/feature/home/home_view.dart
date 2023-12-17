@@ -129,6 +129,8 @@ class _HomeViewState extends State<HomeView> {
                         await Workmanager().registerOneOffTask(
                             'stop_service', 'stop',
                             inputData: {'state': false});
+                        Future.delayed(Duration(seconds: 1),
+                            () async => await Workmanager().cancelAll());
                       },
                       label: Text('Stop'),
                     ),
