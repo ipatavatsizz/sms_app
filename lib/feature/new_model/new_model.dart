@@ -15,8 +15,7 @@ class NewModelView extends StatefulWidget {
 }
 
 class _NewModelViewState extends State<NewModelView> {
-  late final TextEditingController number =
-      TextEditingController(text: widget.model?.phone ?? '');
+  // late final TextEditingController number = TextEditingController(text: widget.model?.phone ?? '');
   late final TextEditingController filter =
       TextEditingController(text: widget.model?.filter ?? '');
 
@@ -52,21 +51,21 @@ class _NewModelViewState extends State<NewModelView> {
             padding: EdgeInsets.all(10),
             child: Column(
               children: [
-                TextFormField(
-                  controller: number,
-                  keyboardType: TextInputType.phone,
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    labelText: 'Phone number to filter',
-                    hintText: '5550035244',
-                    border: OutlineInputBorder(),
-                    isCollapsed: true,
-                    contentPadding: EdgeInsets.all(10),
-                  ),
-                  onTapOutside: (event) {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                  },
-                ),
+                // TextFormField(
+                //   controller: number,
+                //   keyboardType: TextInputType.phone,
+                //   autofocus: true,
+                //   decoration: InputDecoration(
+                //     labelText: 'Phone number to filter',
+                //     hintText: '5550035244',
+                //     border: OutlineInputBorder(),
+                //     isCollapsed: true,
+                //     contentPadding: EdgeInsets.all(10),
+                //   ),
+                //   onTapOutside: (event) {
+                //     FocusManager.instance.primaryFocus?.unfocus();
+                //   },
+                // ),
                 SizedBox(height: 15),
                 TextFormField(
                   controller: filter,
@@ -85,10 +84,8 @@ class _NewModelViewState extends State<NewModelView> {
                 ElevatedButton(
                     onPressed: () {
                       DatabaseService.instance.put(widget.model != null
-                          ? widget.model!
-                              .copyWith(filter: filter.text, phone: number.text)
-                          : FilterModel(
-                              filter: filter.text, phone: number.text));
+                          ? widget.model!.copyWith(filter: filter.text)
+                          : FilterModel(filter: filter.text));
                       Navigator.of(context).pushReplacement(
                           MaterialPageRoute(builder: (context) => HomeView()));
                     },

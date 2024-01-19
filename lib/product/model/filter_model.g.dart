@@ -26,11 +26,6 @@ const FilterModelSchema = CollectionSchema(
       id: 1,
       name: r'filter',
       type: IsarType.string,
-    ),
-    r'phone': PropertySchema(
-      id: 2,
-      name: r'phone',
-      type: IsarType.string,
     )
   },
   estimateSize: _filterModelEstimateSize,
@@ -54,7 +49,6 @@ int _filterModelEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.filter.length * 3;
-  bytesCount += 3 + object.phone.length * 3;
   return bytesCount;
 }
 
@@ -66,7 +60,6 @@ void _filterModelSerialize(
 ) {
   writer.writeBool(offsets[0], object.active);
   writer.writeString(offsets[1], object.filter);
-  writer.writeString(offsets[2], object.phone);
 }
 
 FilterModel _filterModelDeserialize(
@@ -79,7 +72,6 @@ FilterModel _filterModelDeserialize(
     active: reader.readBoolOrNull(offsets[0]) ?? true,
     filter: reader.readString(offsets[1]),
     id: id,
-    phone: reader.readString(offsets[2]),
   );
   return object;
 }
@@ -94,8 +86,6 @@ P _filterModelDeserializeProp<P>(
     case 0:
       return (reader.readBoolOrNull(offset) ?? true) as P;
     case 1:
-      return (reader.readString(offset)) as P;
-    case 2:
       return (reader.readString(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -389,138 +379,6 @@ extension FilterModelQueryFilter
       ));
     });
   }
-
-  QueryBuilder<FilterModel, FilterModel, QAfterFilterCondition> phoneEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'phone',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FilterModel, FilterModel, QAfterFilterCondition>
-      phoneGreaterThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'phone',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FilterModel, FilterModel, QAfterFilterCondition> phoneLessThan(
-    String value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'phone',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FilterModel, FilterModel, QAfterFilterCondition> phoneBetween(
-    String lower,
-    String upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'phone',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FilterModel, FilterModel, QAfterFilterCondition> phoneStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'phone',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FilterModel, FilterModel, QAfterFilterCondition> phoneEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'phone',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FilterModel, FilterModel, QAfterFilterCondition> phoneContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'phone',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FilterModel, FilterModel, QAfterFilterCondition> phoneMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'phone',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<FilterModel, FilterModel, QAfterFilterCondition> phoneIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'phone',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<FilterModel, FilterModel, QAfterFilterCondition>
-      phoneIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'phone',
-        value: '',
-      ));
-    });
-  }
 }
 
 extension FilterModelQueryObject
@@ -552,18 +410,6 @@ extension FilterModelQuerySortBy
   QueryBuilder<FilterModel, FilterModel, QAfterSortBy> sortByFilterDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'filter', Sort.desc);
-    });
-  }
-
-  QueryBuilder<FilterModel, FilterModel, QAfterSortBy> sortByPhone() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'phone', Sort.asc);
-    });
-  }
-
-  QueryBuilder<FilterModel, FilterModel, QAfterSortBy> sortByPhoneDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'phone', Sort.desc);
     });
   }
 }
@@ -605,18 +451,6 @@ extension FilterModelQuerySortThenBy
       return query.addSortBy(r'id', Sort.desc);
     });
   }
-
-  QueryBuilder<FilterModel, FilterModel, QAfterSortBy> thenByPhone() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'phone', Sort.asc);
-    });
-  }
-
-  QueryBuilder<FilterModel, FilterModel, QAfterSortBy> thenByPhoneDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'phone', Sort.desc);
-    });
-  }
 }
 
 extension FilterModelQueryWhereDistinct
@@ -631,13 +465,6 @@ extension FilterModelQueryWhereDistinct
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'filter', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<FilterModel, FilterModel, QDistinct> distinctByPhone(
-      {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'phone', caseSensitive: caseSensitive);
     });
   }
 }
@@ -659,12 +486,6 @@ extension FilterModelQueryProperty
   QueryBuilder<FilterModel, String, QQueryOperations> filterProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'filter');
-    });
-  }
-
-  QueryBuilder<FilterModel, String, QQueryOperations> phoneProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'phone');
     });
   }
 }

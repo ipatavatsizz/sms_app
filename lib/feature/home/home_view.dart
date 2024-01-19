@@ -84,8 +84,7 @@ class _HomeViewState extends State<HomeView> {
                                                                 model: item,
                                                                 remove: true,
                                                               ))),
-                                              title: Text(item.phone),
-                                              trailing: Text(item.filter),
+                                              title: Text(item.filter),
                                               leadingAndTrailingTextStyle:
                                                   Theme.of(context)
                                                       .textTheme
@@ -129,8 +128,9 @@ class _HomeViewState extends State<HomeView> {
                         await Workmanager().registerOneOffTask(
                             'stop_service', 'stop',
                             inputData: {'state': false});
-                        Future.delayed(Duration(seconds: 1),
-                            () async => await Workmanager().cancelAll());
+                        Future.delayed(Duration(seconds: 5), () async {
+                          await Workmanager().cancelAll();
+                        });
                       },
                       label: Text('Stop'),
                     ),

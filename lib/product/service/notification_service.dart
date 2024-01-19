@@ -20,7 +20,6 @@ void notificationBackgroundHandler(NotificationResponse response) async {
 
 void notificationForegroundHandler(NotificationResponse response) async {
   inspect(response);
-  // TODO(ipatavatsizz): Handle actions
 }
 
 @pragma('vm:entry-point')
